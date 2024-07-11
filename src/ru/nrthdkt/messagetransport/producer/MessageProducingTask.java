@@ -13,9 +13,9 @@ public class MessageProducingTask implements Runnable{
     private static final String TEMPLATE_MESSAGE_MESPROD = "Message '%s' is produced\n";
     private static final int messageDelay = 1;
 
-    public MessageProducingTask(final MessageBroker messageBroker){
+    public MessageProducingTask(final MessageBroker messageBroker,final MessageFactory messageFactory){
         this.messageBroker = messageBroker;
-        this.messageFactory = new MessageFactory();
+        this.messageFactory = messageFactory;
     }
     @Override
     public void run() {
@@ -32,16 +32,4 @@ public class MessageProducingTask implements Runnable{
         }
     }
 
-    private static final class MessageFactory{
-        private static final int INITIAL_NEXT_MESSAGE_INDEX = 1;
-        private static final String TEMPLATE_CREATED_MESSAGE_DATA = "Message#%d";
-        private int nextMessageIndex;
-
-        public MessageFactory(){
-            this.nextMessageIndex = INITIAL_NEXT_MESSAGE_INDEX;
-        }
-        public Message createMessage(){
-            return new Message(format(TEMPLATE_CREATED_MESSAGE_DATA,this.nextMessageIndex++));
-        }
-    }
 }

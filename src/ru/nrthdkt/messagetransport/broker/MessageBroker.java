@@ -3,7 +3,11 @@ package ru.nrthdkt.messagetransport.broker;
 import ru.nrthdkt.messagetransport.model.Message;
 
 import java.util.ArrayDeque;
+import java.util.Optional;
 import java.util.Queue;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 public class MessageBroker {
     private final Queue<Message> messagesToBeConsumed;
@@ -27,18 +31,18 @@ public class MessageBroker {
         }
     }
 
-    public synchronized Message consume() {
+    public synchronized Optional<Message> consume() {
         try{
             while(this.messagesToBeConsumed.isEmpty()){
                 super.wait();
             }
             final Message consumedMessage = messagesToBeConsumed.poll();
             super.notify();
-            return consumedMessage;
+            return of(consumedMessage);
         }
         catch(final InterruptedException exception){
             Thread.currentThread().interrupt();
-            throw new RuntimeException(exception.getMessage());
+            return empty();
         }
     }
 }
