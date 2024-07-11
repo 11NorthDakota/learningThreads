@@ -1,3 +1,5 @@
+package ru.nrthdkt.messagetransport.model;
+
 import java.util.Objects;
 
 public class Message {
